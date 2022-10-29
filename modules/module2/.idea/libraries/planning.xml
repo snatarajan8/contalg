@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="planning">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/planning.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -1,0 +1,151 @@
+
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import javax.swing.event.*;
+import javax.swing.border.*;
+import java.util.*;
+import java.text.*;
+
+public class ReactionSim extends JFrame {
+
+    // The frame consists of a single container and a cardlayout.
+    JPanel mainPanel;
+    CardLayout card;
+
+    // Individual experiments/simulators:
+    MolecularSimPanel molSim;
+    ODESimPanel odeSim;
+    NonlinearReactionPanel brusselator;
+    NonlinearReactionPanel rabbitLynx;
+    BooleanPanel bool;
+
+    public ReactionSim ()
+    {
+	this.setTitle ("ReactionSim");
+	this.setBackground (Color.white);
+	this.setResizable (true);
+	this.setSize (700, 700);
+
+	Container cPane = this.getContentPane();
+
+	JMenuBar menuBar = new JMenuBar ();
+	menuBar.add (makeModelMenu());
+	this.setJMenuBar (menuBar);
+
+	mainPanel = new JPanel ();
+	card = new CardLayout ();
+	mainPanel.setLayout (card);
+	mainPanel.setOpaque (false);
+
+	molSim = new MolecularSimPanel ();
+	mainPanel.add (molSim, "1");
+	odeSim = new ODESimPanel ();
+	mainPanel.add (odeSim, "2");
+	brusselator = new NonlinearReactionPanel (NonlinearReactionPanel.BRUSSELATOR);
+	rabbitLynx = new NonlinearReactionPanel (NonlinearReactionPanel.RABBIT_LYNX);
+	mainPanel.add (brusselator, "3");
+	mainPanel.add (rabbitLynx, "4");
+	bool = new BooleanPanel ();
+	mainPanel.add (bool, "5");
+
+	cPane.add (mainPanel);
+
+	this.setVisible (true);
+    }
+
+
+    JMenu makeModelMenu()
+    {
+	// Add a "File" menu with two items.
+	JMenu modelMenu = new JMenu ("Model");
+
+	JMenuItem m = new JMenuItem ("A+B <-> C: Standard Simulation");
+	m.addActionListener (
+          new ActionListener () {
+	      public void actionPerformed (ActionEvent a)
+	      {
+		  molSim.setModel (MolecularSimPanel.ABC_STANDARD);
+		  card.show (mainPanel, "1");
+	      }  
+	  }
+	  );
+	modelMenu.add (m);
+
+	m = new JMenuItem ("A+B <-> C: Spatial Simulation");
+	m.addActionListener (
+          new ActionListener () {
+	      public void actionPerformed (ActionEvent a)
+	      {
+		  molSim.setModel (MolecularSimPanel.ABC_SPATIAL);
+		  card.show (mainPanel, "1");
+	      }  
+	  }
+	  );
+	modelMenu.add (m);
+
+	m = new JMenuItem ("A+B <--> C: ODE Simulation");
+	m.addActionListener (
+          new ActionListener () {
+	      public void actionPerformed (ActionEvent a)
+	      {
+		  card.show (mainPanel, "2");
+	      }  
+	  }
+	  );
+	modelMenu.add (m);
+
+	m = new JMenuItem ("Brusselator reaction");
+	m.addActionListener (
+          new ActionListener () {
+	      public void actionPerformed (ActionEvent a)
+	      {
+		  card.show (mainPanel, "3");
+	      }  
+	  }
+	  );
+	modelMenu.add (m);
+
+	m = new JMenuItem ("Rabbit-Lynix \"reaction\"");
+	m.addActionListener (
+          new ActionListener () {
+	      public void actionPerformed (ActionEvent a)
+	      {
+		  card.show (mainPanel, "4");
+	      }  
+	  }
+	  );
+	modelMenu.add (m);
+
+	m = new JMenuItem ("Boolean Network");
+	m.addActionListener (
+          new ActionListener () {
+	      public void actionPerformed (ActionEvent a)
+	      {
+		  card.show (mainPanel, "5");
+	      }  
+	  }
+	  );
+	modelMenu.add (m);
+
+	m = new JMenuItem ("Exit");
+	m.addActionListener (
+          new ActionListener () {
+	      public void actionPerformed (ActionEvent a)
+	      {
+		  System.exit (0);
+	      }  
+	  }
+	  );
+	modelMenu.add (m);
+
+	return modelMenu;
+    }
+
+
+    public static void main (String[] argv)
+    {
+	new ReactionSim ();
+    }
+
+}
